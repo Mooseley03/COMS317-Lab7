@@ -44,7 +44,8 @@ public class CalculatorModel {
     }
 
     public void memorySubtract(double value) {
-        memory -= value;
+        double originalMemory = memory;
+        memory = originalMemory - value;
     }
 
     public double memoryRecall() {

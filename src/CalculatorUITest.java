@@ -50,18 +50,44 @@ public class CalculatorUITest {
     }
 
     @Test
-    public void testMemoryRecall() throws Exception {
+    public void testMemorySubtract() throws Exception {
         SwingUtilities.invokeAndWait(() -> {
             try {
-                getNumberButton(5).doClick();
+                // Clear everything
+                getPrivateButton("clearButton").doClick();
+                getPrivateButton("memoryClearButton").doClick();
+
+                // Perform an operation resulting in 20 (e.g., 10 + 10)
+                getNumberButton(1).doClick();
+                getNumberButton(0).doClick();
+                getPrivateButton("addButton").doClick();
+                getNumberButton(1).doClick();
+                getNumberButton(0).doClick();
+                getPrivateButton("equalsButton").doClick();
+                assertEquals("20", view.getDisplayText());
+
+                // Add the result (20) to memory
                 getPrivateButton("memoryAddButton").doClick();
-                getPrivateButton("memoryRecallButton").doClick();
-//                System.out.println("Worked");
-                assertEquals("5", view.getDisplayText());
+
+                // Perform another operation resulting in 80 (e.g., 40 + 40)
+                getNumberButton(4).doClick();
+                getNumberButton(0).doClick();
+                getPrivateButton("addButton").doClick();
+                getNumberButton(4).doClick();
+                getNumberButton(0).doClick();
+                getPrivateButton("equalsButton").doClick();
+                assertEquals("80", view.getDisplayText());
+
+                // Subtract memory (20) from the result (80)
+                getPrivateButton("memorySubButton").doClick();
+
+                // Verify the result is 60 (80 - 20)
+                assertEquals("60", view.getDisplayText());
+
             } catch (Exception e) {
-//            	System.out.println(e.getMessage());
                 fail("Exception during test: " + e.getMessage());
             }
         });
     }
+
 }
