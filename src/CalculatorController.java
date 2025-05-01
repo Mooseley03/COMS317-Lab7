@@ -41,15 +41,30 @@ public class CalculatorController {
         }
 
         private void handleOperator(String op) {
-            if (operator.isEmpty()) {
-                try {
-                    double operand = Double.parseDouble(currentOperand);
-                    model.setResult(operand); // Store first number
-                    operator = op;
-                    operatorPressed = true;
-                } catch (NumberFormatException ex) {
-                    view.setDisplayText("Error");
+            try {
+                double operand = Double.parseDouble(currentOperand);
+
+                switch (op) {
+                    case "x²":
+                        double squareResult = model.square(operand);
+                        view.setDisplayText(formatResult(squareResult));
+                        currentOperand = String.valueOf(squareResult);
+                        break;
+                    case "√":
+                        double sqrtResult = model.squareRoot(operand);
+                        view.setDisplayText(formatResult(sqrtResult));
+                        currentOperand = String.valueOf(sqrtResult);
+                        break;
+                    default:
+                        if (operator.isEmpty()) {
+                            model.setResult(operand); // Store first number
+                            operator = op;
+                            operatorPressed = true;
+                        }
+                        break;
                 }
+            } catch (NumberFormatException | ArithmeticException ex) {
+                view.setDisplayText("Error");
             }
         }
 

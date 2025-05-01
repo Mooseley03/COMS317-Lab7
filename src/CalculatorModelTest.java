@@ -64,6 +64,31 @@ public class CalculatorModelTest {
         assertEquals(5.0, model.memoryRecall(), 0.0001); // Compare memory value
     }
     
+    @Test
+    public void testMemorySubtract() {
+    	model.memorySubtract(5);
+    	assertEquals(-5.0, model.memoryRecall(), 0.0001);
+    }
+    
+    @Test
+    public void testMemoryClear() {
+    	model.memoryAdd(5);
+    	model.memoryClear();
+    	assertEquals(0.0, model.memoryRecall(), 0.0001);
+    }
+    
+    @Test
+    public void testSquare() {
+        model.square(4);
+        assertEquals(16, model.getResult(), 0.0001);
+    }
+
+    @Test
+    public void testSquareRoot() {
+        model.squareRoot(25);
+        assertEquals(5, model.getResult(), 0.0001);
+    }
+    
 
     @Test
     public void testDivideByZero() {

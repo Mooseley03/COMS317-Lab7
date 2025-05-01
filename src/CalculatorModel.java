@@ -21,6 +21,19 @@ public class CalculatorModel {
         result = a / b;
         return result;
     }
+    
+    public double square(double a) {
+        result = a * a;
+        return result;
+    }
+
+    public double squareRoot(double a) {
+        if (a < 0) {
+            throw new ArithmeticException("Cannot take square root of negative number");
+        }
+        result = Math.sqrt(a);
+        return result;
+    }
 
     public double getResult() {
         return result;
@@ -39,7 +52,7 @@ public class CalculatorModel {
     }
 
     public void memoryClear() {
-        memory = 0;
+        memory = 0.0;
     }
     
     public void setResult(double value) {
