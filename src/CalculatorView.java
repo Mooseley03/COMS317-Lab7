@@ -86,7 +86,7 @@ public class CalculatorView extends JFrame {
         decimalButton = new JButton(".");
         decimalButton.setName("decimalButton");
 
-        // Add buttons to panel
+        // Add buttons to pannel
         buttonPanel.add(decimalButton);
         buttonPanel.add(addButton);
         buttonPanel.add(subButton);
@@ -163,6 +163,10 @@ public class CalculatorView extends JFrame {
 
     public String getDisplayText() {
         return display.getText();
+    }
+
+    public String getLastOperationButtonColor(){
+        return lastOperationButton.getBackground().toString();
     }
 
     public void setDisplayText(String text) {

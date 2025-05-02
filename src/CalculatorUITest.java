@@ -188,4 +188,163 @@ public class CalculatorUITest {
             }
         });
     }
+
+    @Test
+    public void noOperationSymbolDisplayedWhilePerformingAdditionOperation() throws Exception {
+        SwingUtilities.invokeAndWait(() -> {
+            try {
+                getNumberButton(5).doClick();
+                getPrivateButton("addButton").doClick();
+                assertEquals("5", view.getDisplayText());
+                getNumberButton(3).doClick();
+                assertEquals("3", view.getDisplayText());
+                getPrivateButton("equalsButton").doClick();
+                assertEquals("8", view.getDisplayText());
+            } catch (Exception e) {
+                fail("Exception during test: " + e.getMessage());
+            }
+        });
+    }
+
+    @Test
+    public void noOperationSymbolDisplayedWhilePerformingMultiplicationOperation() throws Exception{
+        SwingUtilities.invokeAndWait(() -> {
+            try {
+                getNumberButton(5).doClick();
+                getPrivateButton("mulButton").doClick();
+                assertEquals("5", view.getDisplayText());
+                getNumberButton(3).doClick();
+                assertEquals("3", view.getDisplayText());
+                getPrivateButton("equalsButton").doClick();
+                assertEquals("15", view.getDisplayText());
+            } catch (Exception e) {
+                fail("Exception during test: " + e.getMessage());
+            }
+        });
+    }
+
+
+    @Test
+    public void noOperationSymbolDisplayedWhilePerformingSubtractionOperation() throws Exception{
+        SwingUtilities.invokeAndWait(() -> {
+            try {
+                getNumberButton(5).doClick();
+                getPrivateButton("subButton").doClick();
+                assertEquals("5", view.getDisplayText());
+                getNumberButton(3).doClick();
+                assertEquals("3", view.getDisplayText());
+                getPrivateButton("equalsButton").doClick();
+                assertEquals("2", view.getDisplayText());
+            } catch (Exception e) {
+                fail("Exception during test: " + e.getMessage());
+            }
+        });
+    }
+
+    @Test
+    public void noOperationSymbolDisplayedWhilePerformingDivisionOperation() throws Exception{
+        SwingUtilities.invokeAndWait(() -> {
+            try {
+                getNumberButton(5).doClick();
+                getPrivateButton("divButton").doClick();
+                assertEquals("5", view.getDisplayText());
+                getNumberButton(3).doClick();
+                assertEquals("3", view.getDisplayText());
+                getPrivateButton("equalsButton").doClick();
+                assertEquals("1.6666666666666667", view.getDisplayText());
+            } catch (Exception e) {
+                fail("Exception during test: " + e.getMessage());
+            }
+        });
+    }
+
+    //tests for grayed out buttons upon clicking
+
+
+    @Test
+    public void testAdditionButtonGrayedOutWhenOperating() throws Exception {
+        SwingUtilities.invokeAndWait(() -> {
+            try {
+                getNumberButton(5).doClick();
+                getPrivateButton("addButton").doClick();
+                //tests that button changed color to gray
+                assertEquals("java.awt.Color[r=192,g=192,b=192]", getPrivateButton("addButton").getBackground().toString());
+                getNumberButton(3).doClick();
+                //tests that button color remained when pressing a number to be added
+                assertEquals("java.awt.Color[r=192,g=192,b=192]", getPrivateButton("addButton").getBackground().toString());
+                getPrivateButton("equalsButton").doClick();
+                //tests button returned to normal color
+                assertEquals("javax.swing.plaf.ColorUIResource[r=238,g=238,b=238]", getPrivateButton("addButton").getBackground().toString());
+                assertEquals("8", view.getDisplayText());
+            } catch (Exception e) {
+                fail("Exception during test: " + e.getMessage());
+            }
+        });
+    }
+
+    @Test
+    public void testSubtractionButtonGrayedOutWhenOperating() throws Exception {
+        SwingUtilities.invokeAndWait(() -> {
+            try {
+                getNumberButton(5).doClick();
+                getPrivateButton("subButton").doClick();
+                //tests that button changed color to gray
+                assertEquals("java.awt.Color[r=192,g=192,b=192]", getPrivateButton("subButton").getBackground().toString());
+                getNumberButton(3).doClick();
+                //tests that button color remained when pressing a number to be added
+                assertEquals("java.awt.Color[r=192,g=192,b=192]", getPrivateButton("subButton").getBackground().toString());
+                getPrivateButton("equalsButton").doClick();
+                //tests button returned to normal color
+                assertEquals("javax.swing.plaf.ColorUIResource[r=238,g=238,b=238]", getPrivateButton("subButton").getBackground().toString());
+                assertEquals("2", view.getDisplayText());
+            } catch (Exception e) {
+                fail("Exception during test: " + e.getMessage());
+            }
+        });
+    }
+
+    @Test
+    public void testMultiplicationButtonGrayedOutWhenOperating() throws Exception {
+        SwingUtilities.invokeAndWait(() -> {
+            try {
+                getNumberButton(5).doClick();
+                getPrivateButton("mulButton").doClick();
+                //tests that button changed color to gray
+                assertEquals("java.awt.Color[r=192,g=192,b=192]", getPrivateButton("mulButton").getBackground().toString());
+                getNumberButton(3).doClick();
+                //tests that button color remained when pressing a number to be added
+                assertEquals("java.awt.Color[r=192,g=192,b=192]", getPrivateButton("mulButton").getBackground().toString());
+                getPrivateButton("equalsButton").doClick();
+                //tests button returned to normal color
+                assertEquals("javax.swing.plaf.ColorUIResource[r=238,g=238,b=238]", getPrivateButton("mulButton").getBackground().toString());
+                assertEquals("15", view.getDisplayText());
+            } catch (Exception e) {
+                fail("Exception during test: " + e.getMessage());
+            }
+        });
+    }
+
+    @Test
+    public void testDivisionButtonGrayedOutWhenOperating() throws Exception {
+        SwingUtilities.invokeAndWait(() -> {
+            try {
+                getNumberButton(5).doClick();
+                getPrivateButton("divButton").doClick();
+                //tests that button changed color to gray
+                assertEquals("java.awt.Color[r=192,g=192,b=192]", getPrivateButton("divButton").getBackground().toString());
+                getNumberButton(3).doClick();
+                //tests that button color remained when pressing a number to be added
+                assertEquals("java.awt.Color[r=192,g=192,b=192]", getPrivateButton("divButton").getBackground().toString());
+                getPrivateButton("equalsButton").doClick();
+                //tests button returned to normal color
+                assertEquals("javax.swing.plaf.ColorUIResource[r=238,g=238,b=238]", getPrivateButton("divButton").getBackground().toString());
+                assertEquals("1.6666666666666667", view.getDisplayText());
+            } catch (Exception e) {
+                fail("Exception during test: " + e.getMessage());
+            }
+        });
+    }
+
+
+
 }
