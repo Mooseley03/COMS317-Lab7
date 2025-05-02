@@ -9,7 +9,6 @@ public class CalculatorController {
     private boolean operatorPressed = false;
     private boolean isResultDisplayed = false;
 
-
     public CalculatorController(CalculatorModel model, CalculatorView view) {
         this.model = model;
         this.view = view;
@@ -21,12 +20,9 @@ public class CalculatorController {
         public void actionPerformed(ActionEvent e) {
             String command = e.getActionCommand();
 
-            // ---Clear button handling ---
             if ("C".equals(command)) {
                 handleClear();
-            }
-            // ---Delete button handling ---
-            else if ("DEL".equals(command)) {
+            } else if ("DEL".equals(command)) {
                 handleDelete();
             } else if (command.charAt(0) == 'M') {
                 handleMemoryFunctions(command);
@@ -49,16 +45,16 @@ public class CalculatorController {
         }
 
         private void handleDelete() {
-            // Delete should only work on operand entry, not on results
-            if (!currentOperand.isEmpty() && !isResultDisplayed) {
-                currentOperand = currentOperand.substring(0, currentOperand.length() - 1);
-                view.setDisplayText(currentOperand);
+            String displayText = view.getDisplayText();
+            if (!displayText.isEmpty()) {
+                displayText = displayText.substring(0, displayText.length() - 1);
+                view.setDisplayText(displayText);
+                currentOperand = displayText;
+                isResultDisplayed = false;
             }
         }
 
         private void handleOperand(String operand) {
-
-            // If we have a result displayed and start typing a new number, reset
             if (isResultDisplayed) {
                 currentOperand = operand;
                 isResultDisplayed = false;
@@ -73,9 +69,14 @@ public class CalculatorController {
 
         private void handleOperator(String op) {
             try {
-                // For operations that require operands
-                if (currentOperand.isEmpty() && !op.equals("√") && !op.equals("x²")) {
-                    return; // Need an operand for most operations
+//                if (op.equals("-") && currentOperand.isEmpty() && !operatorPressed && !isResultDisplayed) {
+//                    currentOperand = "-";
+//                    view.setDisplayText(currentOperand);
+//                    return;
+//                }
+
+                if (currentOperand.isEmpty() && !op.equals("√") && !op.equals("x²") && !op.equals("±")) {
+                    return;
                 }
 
                 double operand = currentOperand.isEmpty() ? 0 : Double.parseDouble(currentOperand);
@@ -91,15 +92,16 @@ public class CalculatorController {
                         view.setDisplayText(formatResult(sqrtResult));
                         currentOperand = String.valueOf(sqrtResult);
                         break;
+                    case "±":
+                        operand = -operand;
+                        currentOperand = String.valueOf(operand);
+                        view.setDisplayText(formatResult(operand));
+                        break;
                     default:
-                        // for standard operators (+,-,*,/) store the first operand
-                        // and set the operator
-                        model.setResult(operand);  // Store first operand in the model
+                        model.setResult(operand);
                         operator = op;
                         operatorPressed = true;
-                        // First operand remains on screen, operation button shows active
                         break;
-
                 }
             } catch (NumberFormatException | ArithmeticException ex) {
                 view.setDisplayText("Error");
@@ -109,7 +111,7 @@ public class CalculatorController {
         private void handleEquals() {
             try {
                 if (currentOperand.isEmpty() || operator.isEmpty()) {
-                    return; // Need both operand and operator
+                    return;
                 }
 
                 double operand = Double.parseDouble(currentOperand);
@@ -128,41 +130,30 @@ public class CalculatorController {
                     case "/":
                         result = model.divide(model.getResult(), operand);
                         if (Double.isNaN(result) || Double.isInfinite(result)) {
-                            view.setDisplayText("Error"); // Display error if the result is NaN or Infinity
+                            view.setDisplayText("Error");
                             return;
                         }
                         break;
                     default:
                         return;
                 }
+
                 String resultText = formatResult(result);
                 view.setDisplayText(resultText);
-
-                //Reset the operator and set currentOperand to the result
-                //This allows starting a fresh calculation or continuing with the result
                 currentOperand = resultText;
                 operator = "";
                 operatorPressed = false;
                 isResultDisplayed = true;
-
 
             } catch (NumberFormatException ex) {
                 view.setDisplayText("Error");
             }
         }
 
-        private String formatResult(double value) {
-            if (value == (long) value) {
-                return String.format("%d", (long) value);  // Removes .0 if unnecessary
-            } else {
-                return String.valueOf(value);              // Keeps decimal for non-integers
-            }
-        }
-
         private void handleMemoryFunctions(String command) {
             try {
                 switch (command) {
-                    case "M+": // Add to memory
+                    case "M+":
                         if (isResultDisplayed) {
                             double value = model.getResult();
                             model.memoryAdd(value);
@@ -174,15 +165,15 @@ public class CalculatorController {
                         if (isResultDisplayed) {
                             double result = model.getResult();
                             double memoryValue = model.memoryRecall();
-                            double updatedMemory = result - memoryValue; // Subtract memory from result
+                            double updatedMemory = memoryValue - result;
                             model.memoryClear();
-                            model.memoryAdd(updatedMemory); // Update memory with the new value
+                            model.memoryAdd(updatedMemory);
                             String memoryText = formatResult(updatedMemory);
                             view.setDisplayText(memoryText);
                             currentOperand = memoryText;
-                            operator = ""; // Reset operator
+                            operator = "";
                             operatorPressed = false;
-                            isResultDisplayed = true; // Mark as a valid result
+                            isResultDisplayed = true;
                         } else {
                             view.setDisplayText("Error");
                         }
@@ -192,7 +183,7 @@ public class CalculatorController {
                         String memoryText = formatResult(memoryValue);
                         view.setDisplayText(memoryText);
                         currentOperand = memoryText;
-                        isResultDisplayed = true; // Treat recalled memory as a valid result
+                        isResultDisplayed = true;
                         break;
                     case "MC":
                         model.memoryClear();
@@ -204,19 +195,17 @@ public class CalculatorController {
                 view.setDisplayText("Error");
             }
         }
-    }//end private class ButtonClickListener
+    }
 
-    // After each operation, update the view with the result.
     public void updateView() {
         view.setDisplayText(formatResult(model.getResult()));
     }
-    
+
     private String formatResult(double value) {
         if (value == (long) value) {
-            return String.format("%d", (long) value);  // Removes .0 if unnecessary
+            return String.format("%d", (long) value);
         } else {
-            return String.valueOf(value);              // Keeps decimal for non-integers
+            return String.valueOf(value);
         }
     }
 }
-

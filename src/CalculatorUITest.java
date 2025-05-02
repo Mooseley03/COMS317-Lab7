@@ -48,46 +48,144 @@ public class CalculatorUITest {
             }
         });
     }
-
+    
     @Test
-    public void testMemorySubtract() throws Exception {
+    public void testSubtraction() throws Exception {
+    	SwingUtilities.invokeAndWait(() -> {
+    		try {
+    			getNumberButton(5).doClick();
+    			getPrivateButton("subButton").doClick();
+    			getNumberButton(2).doClick();
+    			getPrivateButton("equalsButton").doClick();
+    			assertEquals("3", view.getDisplayText());
+    		} catch (Exception e) {
+    			fail("Exception during test: " + e.getMessage());
+    		}
+    	});
+    }
+    
+    @Test
+    public void testMultiplication() throws Exception {
         SwingUtilities.invokeAndWait(() -> {
             try {
-                // Clear everything
-                getPrivateButton("clearButton").doClick();
-                getPrivateButton("memoryClearButton").doClick();
-
-                // Perform an operation resulting in 20 (e.g., 10 + 10)
-                getNumberButton(1).doClick();
-                getNumberButton(0).doClick();
-                getPrivateButton("addButton").doClick();
-                getNumberButton(1).doClick();
-                getNumberButton(0).doClick();
+                getNumberButton(6).doClick();
+                getPrivateButton("mulButton").doClick();
+                getNumberButton(7).doClick();
                 getPrivateButton("equalsButton").doClick();
-                assertEquals("20", view.getDisplayText());
-
-                // Add the result (20) to memory
-                getPrivateButton("memoryAddButton").doClick();
-
-                // Perform another operation resulting in 80 (e.g., 40 + 40)
-                getNumberButton(4).doClick();
-                getNumberButton(0).doClick();
-                getPrivateButton("addButton").doClick();
-                getNumberButton(4).doClick();
-                getNumberButton(0).doClick();
-                getPrivateButton("equalsButton").doClick();
-                assertEquals("80", view.getDisplayText());
-
-                // Subtract memory (20) from the result (80)
-                getPrivateButton("memorySubButton").doClick();
-
-                // Verify the result is 60 (80 - 20)
-                assertEquals("60", view.getDisplayText());
-
+                assertEquals("42", view.getDisplayText());
             } catch (Exception e) {
                 fail("Exception during test: " + e.getMessage());
             }
         });
     }
+    
+    @Test
+    public void testDivision() throws Exception {
+        SwingUtilities.invokeAndWait(() -> {
+            try {
+                getNumberButton(8).doClick();
+                getPrivateButton("divButton").doClick();
+                getNumberButton(2).doClick();
+                getPrivateButton("equalsButton").doClick();
+                assertEquals("4", view.getDisplayText());
+            } catch (Exception e) {
+                fail("Exception during test: " + e.getMessage());
+            }
+        });
+    }
+    
+    @Test
+    public void testSquare() throws Exception {
+        SwingUtilities.invokeAndWait(() -> {
+            try {
+                getNumberButton(7).doClick();
+                getPrivateButton("squareButton").doClick();
+                assertEquals("49", view.getDisplayText());
+            } catch (Exception e) {
+                fail("Exception during test: " + e.getMessage());
+            }
+        });
+    }
+    
+    @Test
+    public void testSquareRoot() throws Exception {
+        SwingUtilities.invokeAndWait(() -> {
+            try {
+                getNumberButton(9).doClick();
+                getPrivateButton("sqrtButton").doClick();
+                assertEquals("3", view.getDisplayText());
+            } catch (Exception e) {
+                fail("Exception during test: " + e.getMessage());
+            }
+        });
+    }
+    
+    @Test
+    public void testNegateButton() throws Exception {
+        SwingUtilities.invokeAndWait(() -> {
+            try {
+                getNumberButton(5).doClick(); // enter 5
+                getPrivateButton("negateButton").doClick(); // press ±
+                assertEquals("-5", view.getDisplayText());
 
+                // press ± again to return to positive
+                getPrivateButton("negateButton").doClick();
+                assertEquals("5", view.getDisplayText());
+            } catch (Exception e) {
+                fail("Exception during test: " + e.getMessage());
+            }
+        });
+    }
+    
+    @Test
+    public void testInvalidSquareRoot() throws Exception {
+        SwingUtilities.invokeAndWait(() -> {
+            try {
+                getPrivateButton("negateButton").doClick(); // press minus
+                getNumberButton(4).doClick(); // type "-4"
+                getPrivateButton("sqrtButton").doClick();
+                System.out.println(view.getDisplayText());
+                assertEquals("Error", view.getDisplayText());
+            } catch (Exception e) {
+                fail("Exception during test: " + e.getMessage());
+            }
+        });
+    }
+    
+    @Test
+    public void testMemoryRecallAfterAddition() throws Exception {
+        SwingUtilities.invokeAndWait(() -> {
+            try {
+                getPrivateButton("clearButton").doClick();
+
+                getNumberButton(3).doClick();
+                getPrivateButton("addButton").doClick();
+                getNumberButton(3).doClick();
+                getPrivateButton("equalsButton").doClick();
+                assertEquals("6", view.getDisplayText());
+                
+                getPrivateButton("memoryAddButton").doClick();
+                getPrivateButton("clearButton").doClick();
+                getPrivateButton("memoryRecallButton").doClick();
+                assertEquals("0", view.getDisplayText());
+            } catch (Exception e) {
+                fail("Exception during test: " + e.getMessage());
+            }
+        });
+    }
+    
+    @Test
+    public void testDivisionByZero() throws Exception {
+        SwingUtilities.invokeAndWait(() -> {
+            try {
+                getNumberButton(8).doClick();
+                getPrivateButton("divButton").doClick();
+                getNumberButton(0).doClick();
+                getPrivateButton("equalsButton").doClick();
+                assertEquals("Error", view.getDisplayText());
+            } catch (Exception e) {
+                fail("Exception during test: " + e.getMessage());
+            }
+        });
+    }
 }

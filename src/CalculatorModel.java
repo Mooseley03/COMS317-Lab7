@@ -34,6 +34,11 @@ public class CalculatorModel {
         result = Math.sqrt(a);
         return result;
     }
+    
+    public double negate(double a) {
+        result = -a;
+        return result;
+    }
 
     public double getResult() {
         return result;
