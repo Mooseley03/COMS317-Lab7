@@ -55,6 +55,7 @@ public class CalculatorController {
         }
 
         private void handleOperand(String operand) {
+            // Check if the current operand is a result display or if an operator was pressed
             if (isResultDisplayed) {
                 currentOperand = operand;
                 isResultDisplayed = false;
@@ -62,10 +63,15 @@ public class CalculatorController {
                 currentOperand = operand;
                 operatorPressed = false;
             } else {
-                currentOperand += operand;
+                // Only allow a decimal if there's no decimal already in the current operand
+                if (operand.equals(".") && currentOperand.contains(".")) {
+                    return; // Prevent adding multiple decimals
+                }
+                currentOperand += operand; // Append the operand (number or decimal)
             }
             view.setDisplayText(currentOperand);
         }
+
 
         private void handleOperator(String op) {
             try {

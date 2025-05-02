@@ -10,6 +10,7 @@ public class CalculatorView extends JFrame {
     public JButton equalsButton, clearButton, deleteButton;
     public JButton squareButton, sqrtButton, negateButton;
     public JButton memoryAddButton, memorySubButton, memoryRecallButton, memoryClearButton;
+    public JButton decimalButton;  // Added the decimal button
 
     // Track the last operation button pressed
     private JButton lastOperationButton = null;
@@ -81,7 +82,12 @@ public class CalculatorView extends JFrame {
         memoryClearButton = new JButton("MC");
         memoryClearButton.setName("memoryClearButton");
 
+        // Decimal Button
+        decimalButton = new JButton(".");
+        decimalButton.setName("decimalButton");
+
         // Add buttons to panel
+        buttonPanel.add(decimalButton);
         buttonPanel.add(addButton);
         buttonPanel.add(subButton);
         buttonPanel.add(mulButton);
@@ -96,6 +102,7 @@ public class CalculatorView extends JFrame {
         buttonPanel.add(memorySubButton);
         buttonPanel.add(memoryRecallButton);
         buttonPanel.add(memoryClearButton);
+        
 
         // Fill remaining slots (if any) to reach 24
         int total = buttonPanel.getComponentCount();
@@ -112,7 +119,8 @@ public class CalculatorView extends JFrame {
                 equalsButton, clearButton, deleteButton,
                 squareButton, sqrtButton, negateButton,
                 memoryAddButton, memorySubButton,
-                memoryRecallButton, memoryClearButton
+                memoryRecallButton, memoryClearButton,
+                decimalButton  // Add decimal button styling
         );
         
         // Add listener to equalsButton to reset operation button colors
@@ -179,5 +187,8 @@ public class CalculatorView extends JFrame {
         memorySubButton.addActionListener(listener);
         memoryRecallButton.addActionListener(listener);
         memoryClearButton.addActionListener(listener);
+
+        // Add action listener for the decimal button
+        decimalButton.addActionListener(listener);
     }
 }
